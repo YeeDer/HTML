@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://bin.webduino.io
+
+Copyright (c) 2018 by anonymous (http://bin.webduino.io/tane/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <script src="https://code.jquery.com/jquery-1.9.1.js"></script>
+</head>
+<body>
+
+<h1 id="time1"></h1>
+<br>
+	
+<h1 id="time2"></h1>
+<br>
+	
+<h2 id="show"></h2>
+<br>
+	
+<h3 id="player"></h3>
+	
+<script id="jsbin-javascript">
+
+
+var stopTime=new Date();//注意:月份從0開始算0是1月 1是2月
+
+function timer()
+{
+	var now=new Date();
+	lastTime=((stopTime-now)-((stopTime-now)%1000))/1000;
+	time1.innerHTML=lastTime;
+	var ti=setTimeout(timer,1000);
+	
+	var s='';
+	for(var i=0;i<playerName.length;i++)
+	{
+		PlayerLastTime=Number(playerTime[i])+lastTime;
+		
+		if(PlayerLastTime<0)
+		s=s+playerName[i]+' dead<br>';
+		else
+		s=s+playerName[i]+' '+PlayerLastTime+'<br>';
+	}
+	playerListOut.innerHTML=s;
+}
+
+
+
+var time1 = document.getElementById('time1');
+
+var $show = $('#show');
+
+var playerListOut=document.getElementById('player');
+
+var playerName=[];
+
+var playerTime=[];
+
+var a = 
+	{
+		sheetUrl : 'https://docs.google.com/spreadsheets/d/1ru2OuQMdifWm8ZtTPMHwUhMOgRuX2p0T2FsHHquo2HU/edit#gid=0',
+		sheetTag : '工作表1'
+	};
+		
+	$.get('https://script.google.com/macros/s/AKfycbwkRm1Kz19F_CMvKCgbUmdrqI1T2z8Drr-j8NiveMKAQKtEtqdt/exec',a,function(data)
+	{
+
+		
+		
+		var dataSplit=data.split(',');//切割資料
+		
+		timeSplit=dataSplit[1].split(':');
+		stopTime=new Date(timeSplit[0],timeSplit[1]-1,timeSplit[2],timeSplit[3],timeSplit[4])
+		
+		//var s='';
+		for(var i=2;i<dataSplit.length;i=i+2)
+		{	
+			playerName.push(dataSplit[i]);
+			playerTime.push(dataSplit[i+1]);
+			//s=s+dataSplit[i]+' '+dataSplit[i+1]+'<br>';
+		}
+		
+		var t=setTimeout(timer,1000);
+	});
+
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
